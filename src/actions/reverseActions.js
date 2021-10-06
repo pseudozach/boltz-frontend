@@ -113,23 +113,26 @@ export const startReverseSwap = (swapInfo, nextStage, timelockExpired) => {
 export const claimSwap = (dispatch, nextStage, swapInfo, swapResponse) => {
   dispatch(
     getFeeEstimation(feeEstimation => {
-      console.log("getFeeEstimation swapInfo.quote", swapInfo.quote, " fee set to 0");
-      const claimTransaction = getClaimTransaction(
-        swapInfo,
-        swapResponse,
-        feeEstimation
-      );
+      console.log("claimSwap getFeeEstimation swapInfo.quote", swapInfo.quote, " fee set to 0");
+      console.log(`claimSwap swapInfo, swapResponse: `, swapInfo, swapResponse);
 
-      dispatch(
-        broadcastClaimTransaction(
-          swapInfo.quote,
-          claimTransaction.toHex(),
-          () => {
-            dispatch(reverseSwapResponse(true, swapResponse));
-            nextStage();
-          }
-        )
-      );
+      // instead we'll build a web3.js contract call to claim with required params on the frontend
+      // const claimTransaction = getClaimTransaction(
+      //   swapInfo,
+      //   swapResponse,
+      //   feeEstimation
+      // );
+
+      // dispatch(
+      //   broadcastClaimTransaction(
+      //     swapInfo.quote,
+      //     claimTransaction.toHex(),
+      //     () => {
+      //       dispatch(reverseSwapResponse(true, swapResponse));
+      //       nextStage();
+      //     }
+      //   )
+      // );
     })
   );
 };
@@ -194,7 +197,7 @@ const handleReverseSwapStatus = (
 
   switch (status) {
     case SwapUpdateEvent.TransactionMempool:
-      console.log(data);
+      console.log(`SwapUpdateEvent.TransactionMempool `, data);
       dispatch(
         reverseSwapResponse(true, {
           transactionId: data.transaction.id,
@@ -206,13 +209,22 @@ const handleReverseSwapStatus = (
       break;
 
     case SwapUpdateEvent.TransactionConfirmed:
-      source.close();
+      console.log(`reverseswap SwapUpdateEvent.TransactionConfirmed `);
+      // source.close();
 
       claimSwap(dispatch, nextStage, swapInfo, {
         ...response,
         transactionId: data.transaction.id,
         transactionHex: data.transaction.hex,
       });
+      break;
+
+    case SwapUpdateEvent.InvoiceSettled:
+      source.close();
+      nextStage();
+
+      // dispatch(setReverseSwapStatus('Could not send onchain coins'));
+      // dispatch(reverseSwapResponse(false, {}));
       break;
 
     case SwapUpdateEvent.SwapExpired:

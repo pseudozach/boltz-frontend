@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import Link from '../../../components/link';
 import View from '../../../components/view';
-import { getCurrencyName, getExplorer } from '../../../utils';
+import { getCurrencyName, getExplorer, claimFunds } from '../../../utils';
 
 const styles = () => ({
   wrapper: {
@@ -53,7 +53,19 @@ class LockingFunds extends React.Component {
           <Link to={link} text={'Click here'} /> to see the lockup transaction.
           <br />
           <br />
-          If you are #reckless and impatient you can accept the 0-conf
+          {(swapInfo.quote === 'SOV' || swapInfo.quote === 'RBTC') ? (
+            <p className={classes.text}>
+              Tap here to trigger Claim Contract Call:{' '}
+              <button
+                onClick={() => claimFunds(swapInfo, swapResponse)}
+                // target={'_blank'}
+                // href="https://litecoin-project.github.io/p2sh-convert/"
+              >
+                Claim
+              </button>
+            </p>
+          ) : null}
+          {/* If you are #reckless and impatient you can accept the 0-conf
           transaction:
           <Switch
             className={classes.switch}
@@ -71,7 +83,7 @@ class LockingFunds extends React.Component {
             onHandleColor="#2693e6"
             boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
             activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-          />
+          /> */}
         </p>
       </View>
     );

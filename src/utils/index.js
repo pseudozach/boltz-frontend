@@ -164,6 +164,80 @@ export const lockFunds = async (swapInfo, swapResponse) => {
   // console.log(`Sent ${argv.token ? 'ERC20 token' : 'Rbtc'} in: ${transaction.hash}`);
 }
 
+
+export const claimFunds = async (swapInfo, swapResponse) => {
+
+  const providerOptions = {
+    /* See Provider Options Section */
+  };
+
+  const web3Modal = new Web3Modal({
+    // network: "mainnet", // optional
+    // cacheProvider: true, // optional
+    // providerOptions // required
+  });
+  // console.log("web3modal defined");
+  const provider = await web3Modal.connect();
+  // console.log("web3 provider ready: ", provider);
+
+  const web3 = new Web3(provider);
+  // console.log("web3 ready: ", web3);
+
+  console.log("claimFunds swapInfo, swapResponse ", swapInfo, swapResponse);
+
+  // const signer = this.connectEthereum(this.provider, this.provider.address);
+  // const { etherSwap, erc20Swap, token } = this.getContracts(signer);
+
+  // var decoded = lightningPayReq.decode(swapInfo.invoice)
+  // // console.log("decoded: ", decoded);
+
+  // var obj = decoded.tags;
+  // for (let index = 0; index < obj.length; index++) {
+  //     const tag = obj[index];
+  //     // console.log("tag: ", tag);
+  //     if(tag.tagName == "payment_hash"){
+  //         console.log("yay: ", tag.data);
+  //         var paymenthash = tag.data;
+  //     }
+  // }
+  // console.log("paymenthash: ", paymenthash);
+  
+  const preimage = getHexBuffer(swapInfo.preimage);
+  var preimageBuffer = Buffer.from(preimage, 'hex');
+  // console.log("getHexBuffer preimage ", paymenthash)
+  console.log("preimageBuffer ", preimageBuffer)
+  const amount = BN.from(swapResponse.onchainAmount).mul(etherDecimals);
+  console.log("amount ", amount)
+
+  const timeout = web3.utils.numberToHex(swapResponse.timeoutBlockHeight);
+  console.log("timeout ", timeout)
+
+  console.log("web3.eth.accounts.currentProvider.selectedAddress ", web3.eth.accounts.currentProvider.selectedAddress);
+
+  // const boltzAddress = "await getBoltzAddress()";
+  // console.log("boltzAddress: ", boltzAddress);
+
+  // if (boltzAddress === undefined) {
+  //   console.log('Could not lock coins because the address of Boltz could not be queried');
+  //   return;
+  // }
+
+  // rbtcswap
+  // preimageHash: BytesLike,
+  // claimAddress: string,
+  // timelock: BigNumberish,
+
+  var rbtcswapabi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"indexed":false,"internalType":"bytes32","name":"preimage","type":"bytes32"}],"name":"Claim","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"address","name":"claimAddress","type":"address"},{"indexed":true,"internalType":"address","name":"refundAddress","type":"address"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"Lockup","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"}],"name":"Refund","type":"event"},{"inputs":[{"internalType":"bytes32","name":"preimage","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"refundAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"address","name":"refundAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"hashValues","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"lock","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"address payable","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"uint256","name":"prepayAmount","type":"uint256"}],"name":"lockPrepayMinerfee","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"refund","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"swaps","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"version","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}];
+  var rbtcswapcontract = new web3.eth.Contract(rbtcswapabi, rbtcswapaddress);
+  console.log("rbtc claiming with ", preimageBuffer, amount, swapResponse.refundAddress, timeout);
+  // , chainId: 33
+  rbtcswapcontract.methods.claim(preimageBuffer, amount, swapResponse.refundAddress, timeout)
+  .send({from: web3.eth.accounts.currentProvider.selectedAddress}, function(error, transactionHash){
+    console.log("error: ", error);
+    console.log("transactionHash: ", transactionHash);
+  });
+}
+
 // Decimals from WEI to 10 ** -8
 export const etherDecimals = BN.from(10).pow(BN.from(10));
 
