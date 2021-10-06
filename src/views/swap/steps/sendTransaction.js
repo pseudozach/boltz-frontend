@@ -68,7 +68,7 @@ const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
     ): null}
     <View className={classes.info}>
       <p className={classes.text}>
-      {swapInfo.base === 'SOV' ? ( 'Lock' ): 'Send' }
+      {(swapInfo.base === 'SOV' || swapInfo.base === 'RBTC') ? ( 'Lock' ): 'Send' }
         <b>
           {' '}
           {toWholeCoins(swapResponse.expectedAmount)} {swapInfo.base}{' '}
@@ -92,7 +92,7 @@ const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
           </a>
         </p>
       ) : null}
-      {swapInfo.base === 'SOV' ? (
+      {(swapInfo.base === 'SOV' || swapInfo.base === 'RBTC') ? (
         <p className={classes.text}>
           Tap here to trigger Lock Contract Call:{' '}
           <button
