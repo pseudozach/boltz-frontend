@@ -5,6 +5,7 @@ import View from '../../../components/view';
 import QrCode from '../../../components/qrcode';
 import { toWholeCoins, copyToClipBoard, lockFunds } from '../../../utils';
 // import { lockFunds }  from '../../../components/swaptab/swaptabwrapper';
+import Button from '../../../components/button';
 
 const SendTransactionStyles = () => ({
   wrapper: {
@@ -95,13 +96,19 @@ const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
       {(swapInfo.base === 'SOV' || swapInfo.base === 'RBTC') ? (
         <p className={classes.text}>
           Tap here to trigger Lock Contract Call:{' '}
-          <button
+          {/* <button
             onClick={() => lockFunds(swapInfo, swapResponse)}
             // target={'_blank'}
             // href="https://litecoin-project.github.io/p2sh-convert/"
           >
             Lock
-          </button>
+          </button> */}
+          <Button
+                text={'Lock'}
+                // error={error || inputError}
+                onPress={() => lockFunds(swapInfo, swapResponse)}
+                // errorText={errorMessage}
+              />
         </p>
       ) : null}
     </View>

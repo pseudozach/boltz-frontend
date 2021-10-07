@@ -5,6 +5,7 @@ import injectSheet from 'react-jss';
 import Link from '../../../components/link';
 import View from '../../../components/view';
 import { getCurrencyName, getExplorer, claimFunds } from '../../../utils';
+import Button from '../../../components/button';
 
 const styles = () => ({
   wrapper: {
@@ -56,13 +57,19 @@ class LockingFunds extends React.Component {
           {(swapInfo.quote === 'SOV' || swapInfo.quote === 'RBTC') ? (
             <p className={classes.text}>
               Tap here to trigger Claim Contract Call:{' '}
-              <button
+              {/* <button
                 onClick={() => claimFunds(swapInfo, swapResponse)}
                 // target={'_blank'}
                 // href="https://litecoin-project.github.io/p2sh-convert/"
               >
                 Claim
-              </button>
+              </button> */}
+              <Button
+                text={'Claim'}
+                // error={error || inputError}
+                onPress={() => claimFunds(swapInfo, swapResponse)}
+                // errorText={errorMessage}
+              />
             </p>
           ) : null}
           {/* If you are #reckless and impatient you can accept the 0-conf

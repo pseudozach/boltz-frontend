@@ -7,7 +7,8 @@ const styles = theme => ({
   wrapper: {
     flex: '1 0',
     minHeight: '100vh',
-    backgroundImage: 'linear-gradient(to bottom, #114357, #f29492)',
+    // backgroundImage: 'linear-gradient(to bottom, #114357, #f29492)',
+    background: 'black',
     flexDirection: 'column',
     overflowY: 'auto',
   },

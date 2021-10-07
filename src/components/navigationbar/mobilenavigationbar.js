@@ -36,7 +36,7 @@ class MobileNavigationBar extends React.Component {
               className={''}
               alt="logo"
             />
-            <span className={classes.logoText}>Boltz</span>
+            <span className={classes.logoText}>LNSOV</span>
           </View>
           <MdMenu
             onClick={() => this.toggleMenu()}
@@ -60,7 +60,7 @@ class MobileNavigationBar extends React.Component {
               text="FAQ"
               onPress={() => navigation.navFaq()}
             />
-            <Button
+            {/* <Button
               className={classes.btn}
               external
               text="Onion URL"
@@ -71,9 +71,9 @@ class MobileNavigationBar extends React.Component {
               external
               text="Twitter"
               to="https://twitter.com/boltzhq"
-            />
+            /> */}
             <Button
-              className={classes.responsiveBtn}
+              className={classes.btn}
               external
               text="API"
               to="https://docs.boltz.exchange/en/latest/"
@@ -82,7 +82,7 @@ class MobileNavigationBar extends React.Component {
               className={classes.btn}
               external
               text="Github"
-              to="https://github.com/BoltzExchange"
+              to="https://github.com/lnsovbridge"
             />
           </View>
         ) : (
