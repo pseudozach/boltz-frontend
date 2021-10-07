@@ -37,14 +37,14 @@ const DeskTopSwapTabContent = ({
   connectWallet,
 }) => (
   <View className={classes.wrapper}>
-    <View className={classes.connectButton}>
+    {/* <View className={classes.connectButton}>
       <Button
         text={'Connect Wallet'}
         // error={error || inputError}
         onPress={error ? () => {} : () => connectWallet()}
         // errorText={errorMessage}
       />
-    </View>
+    </View> */}
     <View className={classes.stats}>
       <InfoText
         title="Min amount"

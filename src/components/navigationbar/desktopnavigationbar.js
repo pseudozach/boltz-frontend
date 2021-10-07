@@ -43,12 +43,12 @@ const DeskTopNavigationBar = ({ classes }) => (
         text="Onion URL"
         to={boltzOnion}
       /> */}
-      <Button
+      {/* <Button
         className={classes.responsiveBtn}
         external
         text="Twitter"
         to="https://twitter.com/boltzhq"
-      />
+      /> */}
       <Button
         className={classes.responsiveBtn}
         external
@@ -59,7 +59,7 @@ const DeskTopNavigationBar = ({ classes }) => (
         className={classes.responsiveBtn}
         external
         text="Github"
-        to="https://github.com/BoltzExchange"
+        to="https://github.com/lnsovbridge"
       />
     </View>
   </View>

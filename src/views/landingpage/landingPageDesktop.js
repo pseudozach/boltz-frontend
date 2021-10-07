@@ -37,7 +37,7 @@ const LandingPageDeskTopContent = ({
       <ReactNotification ref={notificationDom} />
       <NavigationBar />
       <View className={classes.wrapper}>
-        <View className={classes.infoWrapper}>
+        {/* <View className={classes.infoWrapper}>
         <p className={classes.title}>
             LN - SOV bridge is a fork of the excellent<br /> boltz.exchange.
           </p>
@@ -56,7 +56,7 @@ const LandingPageDeskTopContent = ({
           <ModalComponent isOpen={isOpen} onClose={toggleModal}>
             <ModalContent />
           </ModalComponent>
-        </View>
+        </View> */}
         {loading ? (
           <View className={classes.loading}>
             <img alt="logo" src={boltz_logo} className={classes.loadingLogo} />
