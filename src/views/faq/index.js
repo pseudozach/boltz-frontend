@@ -65,7 +65,7 @@ class Faq extends React.Component {
               title={style => <h1 className={style}>What is Boltz?</h1>}
               content={style => (
                 <p className={style}>
-                  Boltz is an instant and non custodial crypto currency exchange
+                  LNSOV is an instant and non custodial crypto currency exchange
                   that focuses on the adoption of second layer scaling
                   technologies like the Lightning network and the privacy of its
                   users. We neither use any trackers nor log any data that could
