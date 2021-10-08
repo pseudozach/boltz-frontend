@@ -211,6 +211,7 @@ const handleReverseSwapStatus = (
     case SwapUpdateEvent.TransactionConfirmed:
       console.log(`reverseswap SwapUpdateEvent.TransactionConfirmed `);
       // source.close();
+      dispatch(setReverseSwapStatus('Transaction confirmed'));
 
       claimSwap(dispatch, nextStage, swapInfo, {
         ...response,

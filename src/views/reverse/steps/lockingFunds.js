@@ -42,16 +42,16 @@ class LockingFunds extends React.Component {
   }
 
   render() {
-    const { classes, swapInfo, swapResponse, setAllowZeroConf } = this.props;
+    const { classes, swapInfo, swapResponse, setAllowZeroConf, swapStatus } = this.props;
 
     const link = swapResponse
-      ? `${getExplorer(swapInfo.quote)}/${swapResponse.transactionId}`
+      ? `${getExplorer(swapInfo.quote)}/tx/${swapResponse.transactionId}`
       : '#0';
 
     return (
       <View className={classes.wrapper}>
         <p className={classes.text}>
-          LNSOVBridge is locking the <b>{getCurrencyName(swapInfo.quote)}</b> that you
+          We are locking the <b>{getCurrencyName(swapInfo.quote)}</b> that you
           are ought to receive, this is important to keep the swap atomic and
           trustless. It might take up to 10 minutes.
           <br />
@@ -59,9 +59,12 @@ class LockingFunds extends React.Component {
           <Link to={link} text={'Click here'} /> to see the lockup transaction.
           <br />
           <br />
-          {(swapInfo.quote === 'SOV' || swapInfo.quote === 'RBTC') ? (
+          {(swapInfo.quote === 'SOV' || swapInfo.quote === 'RBTC') && 
+          (swapStatus !== 'Could not send onchain coins' && swapStatus !== 'Waiting for confirmation...') ? (
             <p className={classes.text}>
-              Tap here to trigger Claim Contract Call:{' '}
+              Lockup is confirmed. 
+              <br/>
+              Click here to trigger Claim Contract Call:{' '}
               {/* <button
                 onClick={() => claimFunds(swapInfo, swapResponse)}
                 // target={'_blank'}
@@ -107,6 +110,7 @@ LockingFunds.propTypes = {
   swapInfo: PropTypes.object.isRequired,
   swapResponse: PropTypes.object.isRequired,
   setAllowZeroConf: PropTypes.func.isRequired,
+  swapStatus: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
