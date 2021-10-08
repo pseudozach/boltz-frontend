@@ -1,6 +1,17 @@
-# boltz-frontend
+# LN-SOV Bridge frontend
 
-[![Build Status](https://travis-ci.org/BoltzExchange/boltz-frontend.svg?branch=master)](https://travis-ci.org/BoltzExchange/boltz-frontend)
-[![Discord](https://img.shields.io/discord/547454030801272832.svg)](https://discordapp.com/invite/QBvZGcW)
+This is the frontend for [LN-SOV Bridge](https://github.com/pseudozach/lnsovbridge) which is a non-custodial, submarine swap implementation that supports Rootstock and Lightning Network.
 
-Frontend for boltz
+## install
+* clone the repo and install requirements  
+`git clone https://github.com/pseudozach/boltz-frontend.git`  
+`cd boltz-frontend && npm i`
+
+* make required changes as per your environment to `.env` file
+
+* start the app  
+`npm run start`
+
+## use
+* visit `http://localhost:3000`
+
