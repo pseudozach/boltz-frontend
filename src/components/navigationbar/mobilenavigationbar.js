@@ -82,7 +82,7 @@ class MobileNavigationBar extends React.Component {
               className={classes.btn}
               external
               text="Github"
-              to="https://github.com/lnsovbridge"
+              to="https://github.com/pseudozach/lnsovbridge"
             />
           </View>
         ) : (
