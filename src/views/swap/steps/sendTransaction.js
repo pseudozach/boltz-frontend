@@ -42,6 +42,11 @@ const SendTransactionStyles = () => ({
       fontSize: '16px',
     },
   },
+  contractButton: {
+    background: 'black',
+    margin: '4px',
+    borderRadius: '5px',
+  },
   action: {
     color: 'blue',
     fontWeight: '600',
@@ -62,7 +67,7 @@ const SendTransactionStyles = () => ({
 
 const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
   <View className={classes.wrapper}>
-    {swapInfo.base !== 'SOV' ? (
+    {swapInfo.base !== 'SOV' && swapInfo.base !== 'RBTC' ? (
     <View className={classes.qrcode}>
       <QrCode size={250} link={swapResponse.bip21} />
     </View>
@@ -79,9 +84,9 @@ const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
       <p className={classes.address} id="copy">
         {swapResponse.address}
       </p>
-      <span className={classes.action} onClick={() => copyToClipBoard()}>
+      {/* <span className={classes.action} onClick={() => copyToClipBoard()}>
         Copy
-      </span>
+      </span> */}
       {swapInfo.base === 'LTC' ? (
         <p className={classes.tool}>
           If the address does not work with your wallet:{' '}
@@ -105,6 +110,7 @@ const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
           </button> */}
           <Button
                 text={'Lock'}
+                className={classes.contractButton}
                 // error={error || inputError}
                 onPress={() => lockFunds(swapInfo, swapResponse)}
                 // errorText={errorMessage}

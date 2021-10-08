@@ -25,6 +25,11 @@ const styles = () => ({
   switch: {
     paddingLeft: '10px',
   },
+  contractButton: {
+    background: 'black',
+    margin: '4px',
+    borderRadius: '5px',
+  },  
 });
 
 class LockingFunds extends React.Component {
@@ -65,6 +70,7 @@ class LockingFunds extends React.Component {
                 Claim
               </button> */}
               <Button
+                className={classes.contractButton}
                 text={'Claim'}
                 // error={error || inputError}
                 onPress={() => claimFunds(swapInfo, swapResponse)}
