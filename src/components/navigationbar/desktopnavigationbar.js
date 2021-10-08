@@ -59,7 +59,7 @@ const DeskTopNavigationBar = ({ classes }) => (
         className={classes.responsiveBtn}
         external
         text="Github"
-        to="https://github.com/lnsovbridge"
+        to="https://github.com/pseudozach/lnsovbridge"
       />
     </View>
   </View>
