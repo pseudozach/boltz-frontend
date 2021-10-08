@@ -64,7 +64,7 @@ class LockingFunds extends React.Component {
             <p className={classes.text}>
               Lockup is confirmed. 
               <br/>
-              Click here to trigger Claim Contract Call:{' '}
+              Tap here to trigger Claim Contract Call:{' '}
               {/* <button
                 onClick={() => claimFunds(swapInfo, swapResponse)}
                 // target={'_blank'}
