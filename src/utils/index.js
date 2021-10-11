@@ -233,8 +233,9 @@ export const claimFunds = async (swapInfo, swapResponse) => {
   var rbtcswapcontract = new web3.eth.Contract(rbtcswapabi, swapResponse.lockupAddress);
   console.log("rbtc claiming with ", preimageBuffer, amount, swapResponse.refundAddress, timeout ," from contract ", swapResponse.lockupAddress);
   // , chainId: 33
+  console.log("gasLimit: ", web3.eth.getBlock("latest").gasLimit)
   rbtcswapcontract.methods.claim(preimageBuffer, amount, swapResponse.refundAddress, timeout)
-  .send({from: web3.eth.accounts.currentProvider.selectedAddress}, function(error, transactionHash){
+  .send({from: web3.eth.accounts.currentProvider.selectedAddress, gasLimit: web3.eth.getBlock("latest").gasLimit}, function(error, transactionHash){
     console.log("error: ", error);
     console.log("transactionHash: ", transactionHash);
   });
