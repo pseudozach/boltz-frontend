@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import View from '../../../components/view';
 import QrCode from '../../../components/qrcode';
-import { toWholeCoins, copyToClipBoard, lockFunds } from '../../../utils';
+import { toWholeCoins, copyToClipBoard, lockFunds, lockTokens } from '../../../utils';
 // import { lockFunds }  from '../../../components/swaptab/swaptabwrapper';
 import Button from '../../../components/button';
 
@@ -112,7 +112,12 @@ const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
                 text={'Lock'}
                 className={classes.contractButton}
                 // error={error || inputError}
-                onPress={() => lockFunds(swapInfo, swapResponse)}
+                // onPress={() => lockFunds(swapInfo, swapResponse)}
+                onPress={() =>
+                  swapInfo.base === 'RBTC'
+                    ? lockFunds(swapInfo, swapResponse)
+                    : lockTokens(swapInfo, swapResponse)
+                }
                 // errorText={errorMessage}
               />
         </p>
