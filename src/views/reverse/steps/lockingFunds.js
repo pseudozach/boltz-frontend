@@ -79,7 +79,7 @@ class LockingFunds extends React.Component {
                 // onPress={() => claimFunds(swapInfo, swapResponse)}
                 // onClick={() =>
                 onPress={() =>
-                  swapInfo.base === 'RBTC'
+                  swapInfo.quote === 'RBTC'
                     ? claimFunds(swapInfo, swapResponse)
                     : claimTokens(swapInfo, swapResponse)
                 }
