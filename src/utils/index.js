@@ -10,16 +10,16 @@ import {
   litecoinAddress,
   bitcoinInvoice,
   litecoinInvoice,
-  erc20tokenaddress,
-  rbtcswapaddress,
-  erc20swapaddress,
+  // erc20tokenaddress,
+  // rbtcswapaddress,
+  // erc20swapaddress,
 } from '../constants';
 
 import Web3 from 'web3';
-import Web3Modal from "web3modal";
+import Web3Modal from 'web3modal';
 
 // import { ContractABIs } from 'boltz-core';
-// // @ts-ignore 
+// // @ts-ignore
 // import { ERC20 } from 'boltz-core/typechain/ERC20';
 // import { ERC20Swap } from 'boltz-core/typechain/ERC20Swap';
 // import { EtherSwap } from 'boltz-core/typechain/EtherSwap';
@@ -29,10 +29,9 @@ import { BigNumber as BN } from 'ethers';
 import lightningPayReq from 'bolt11';
 
 export const lockFunds = async (swapInfo, swapResponse) => {
-
-  const providerOptions = {
-    /* See Provider Options Section */
-  };
+  // const providerOptions = {
+  //   /* See Provider Options Section */
+  // };
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -46,36 +45,39 @@ export const lockFunds = async (swapInfo, swapResponse) => {
   const web3 = new Web3(provider);
   // console.log("web3 ready: ", web3);
 
-  console.log("lockFunds swapInfo, swapResponse ", swapInfo, swapResponse);
+  console.log('lockFunds swapInfo, swapResponse ', swapInfo, swapResponse);
 
   // const signer = this.connectEthereum(this.provider, this.provider.address);
   // const { etherSwap, erc20Swap, token } = this.getContracts(signer);
 
-  var decoded = lightningPayReq.decode(swapInfo.invoice)
+  var decoded = lightningPayReq.decode(swapInfo.invoice);
   // console.log("decoded: ", decoded);
 
   var obj = decoded.tags;
   for (let index = 0; index < obj.length; index++) {
-      const tag = obj[index];
-      // console.log("tag: ", tag);
-      if(tag.tagName == "payment_hash"){
-          console.log("yay: ", tag.data);
-          var paymenthash = tag.data;
-      }
+    const tag = obj[index];
+    // console.log("tag: ", tag);
+    if (tag.tagName == 'payment_hash') {
+      console.log('yay: ', tag.data);
+      var paymenthash = tag.data;
+    }
   }
-  console.log("paymenthash: ", paymenthash);
-  
-  const preimageHash = getHexBuffer(paymenthash);
+  console.log('paymenthash: ', paymenthash);
+
+  // const preimageHash = getHexBuffer(paymenthash);
   var preimageHashbuffer = Buffer.from(paymenthash, 'hex');
-  console.log("getHexBuffer preimageHash ", paymenthash)
-  console.log("preimageHashbuffer ", preimageHashbuffer)
+  console.log('getHexBuffer preimageHash ', paymenthash);
+  console.log('preimageHashbuffer ', preimageHashbuffer);
   const amount = BN.from(swapResponse.expectedAmount).mul(etherDecimals);
-  console.log("amount ", amount)
+  console.log('amount ', amount);
 
   const timeout = web3.utils.numberToHex(swapResponse.timeoutBlockHeight);
-  console.log("timeout ", timeout)
+  console.log('timeout ', timeout);
 
-  console.log("web3.eth.accounts.currentProvider.selectedAddress ", web3.eth.accounts.currentProvider.selectedAddress);
+  console.log(
+    'web3.eth.accounts.currentProvider.selectedAddress ',
+    web3.eth.accounts.currentProvider.selectedAddress
+  );
 
   // const boltzAddress = "await getBoltzAddress()";
   // console.log("boltzAddress: ", boltzAddress);
@@ -90,15 +92,181 @@ export const lockFunds = async (swapInfo, swapResponse) => {
   // claimAddress: string,
   // timelock: BigNumberish,
 
-  var rbtcswapabi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"indexed":false,"internalType":"bytes32","name":"preimage","type":"bytes32"}],"name":"Claim","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"address","name":"claimAddress","type":"address"},{"indexed":true,"internalType":"address","name":"refundAddress","type":"address"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"Lockup","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"}],"name":"Refund","type":"event"},{"inputs":[{"internalType":"bytes32","name":"preimage","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"refundAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"address","name":"refundAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"hashValues","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"lock","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"address payable","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"uint256","name":"prepayAmount","type":"uint256"}],"name":"lockPrepayMinerfee","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"refund","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"swaps","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"version","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}];
+  var rbtcswapabi = [
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
+        {
+          indexed: false,
+          internalType: 'bytes32',
+          name: 'preimage',
+          type: 'bytes32',
+        },
+      ],
+      name: 'Claim',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
+        },
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
+        },
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
+        },
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
+      ],
+      name: 'Lockup',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
+      ],
+      name: 'Refund',
+      type: 'event',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimage', type: 'bytes32' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+        { internalType: 'address', name: 'refundAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'claim',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+        { internalType: 'address', name: 'claimAddress', type: 'address' },
+        { internalType: 'address', name: 'refundAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'hashValues',
+      outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+      stateMutability: 'pure',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        { internalType: 'address', name: 'claimAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'lock',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        {
+          internalType: 'address payable',
+          name: 'claimAddress',
+          type: 'address',
+        },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+        { internalType: 'uint256', name: 'prepayAmount', type: 'uint256' },
+      ],
+      name: 'lockPrepayMinerfee',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+        { internalType: 'address', name: 'claimAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'refund',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+      name: 'swaps',
+      outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'version',
+      outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ];
   // rbtcswapaddress
-  var rbtcswapcontract = new web3.eth.Contract(rbtcswapabi,swapResponse.address);
-  console.log("rbtc locking with ", preimageHashbuffer, swapResponse.claimAddress.toLowerCase(), timeout, "to contract ", swapResponse.address);
+  var rbtcswapcontract = new web3.eth.Contract(
+    rbtcswapabi,
+    swapResponse.address
+  );
+  console.log(
+    'rbtc locking with ',
+    preimageHashbuffer,
+    swapResponse.claimAddress.toLowerCase(),
+    timeout,
+    'to contract ',
+    swapResponse.address
+  );
   // , chainId: 33
-  rbtcswapcontract.methods.lock(preimageHashbuffer, swapResponse.claimAddress.toLowerCase(), timeout).send({from: web3.eth.accounts.currentProvider.selectedAddress, value: amount}, function(error, transactionHash){
-    console.log("error: ", error);
-    console.log("transactionHash: ", transactionHash);
-  });
+  rbtcswapcontract.methods
+    .lock(preimageHashbuffer, swapResponse.claimAddress.toLowerCase(), timeout)
+    .send(
+      {
+        from: web3.eth.accounts.currentProvider.selectedAddress,
+        value: amount,
+      },
+      function(error, transactionHash) {
+        console.log('error: ', error);
+        console.log('transactionHash: ', transactionHash);
+      }
+    );
 
   // erc20 - tokenswap part
   // preimageHash: BytesLike,
@@ -111,8 +279,6 @@ export const lockFunds = async (swapInfo, swapResponse) => {
   // var erc20swapcontract = new web3.eth.Contract(erc20swapabi, erc20swapaddress);
   // console.log(erc20swapcontract)
 
-  
-  
   // erc20swapcontract.lock.sendTransaction("parameter_1","parameter_2","parameter_n",{
   //   from:web3.eth.accounts[0],
   //   gas:4000000},function (error, result){ //get callback from function which is your transaction key
@@ -130,10 +296,10 @@ export const lockFunds = async (swapInfo, swapResponse) => {
   // });
 
   //       "preimageHash",
-//       "amount",
-//       "tokenAddress",
-//       "claimAddress",
-//       "timelock"
+  //       "amount",
+  //       "tokenAddress",
+  //       "claimAddress",
+  //       "timelock"
 
   // let transaction;
   // : ContractTransaction;
@@ -163,13 +329,12 @@ export const lockFunds = async (swapInfo, swapResponse) => {
 
   // await transaction.wait(1);
   // console.log(`Sent ${argv.token ? 'ERC20 token' : 'Rbtc'} in: ${transaction.hash}`);
-}
+};
 
 export const lockTokens = async (swapInfo, swapResponse) => {
-
-  const providerOptions = {
-    /* See Provider Options Section */
-  };
+  // const providerOptions = {
+  //   /* See Provider Options Section */
+  // };
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -183,7 +348,7 @@ export const lockTokens = async (swapInfo, swapResponse) => {
   const web3 = new Web3(provider);
   // console.log("web3 ready: ", web3);
 
-  console.log("lockTokens swapInfo, swapResponse ", swapInfo, swapResponse);
+  console.log('lockTokens swapInfo, swapResponse ', swapInfo, swapResponse);
 
   // const signer = this.connectEthereum(this.provider, this.provider.address);
   // const { etherSwap, erc20Swap, token } = this.getContracts(signer);
@@ -193,30 +358,35 @@ export const lockTokens = async (swapInfo, swapResponse) => {
 
   var obj = decoded.tags;
   for (let index = 0; index < obj.length; index++) {
-      const tag = obj[index];
-      // console.log("tag: ", tag);
-      if(tag.tagName == "payment_hash"){
-          console.log("yay: ", tag.data);
-          var paymenthash = tag.data;
-      }
+    const tag = obj[index];
+    // console.log("tag: ", tag);
+    if (tag.tagName == 'payment_hash') {
+      console.log('yay: ', tag.data);
+      var paymenthash = tag.data;
+    }
   }
-  console.log("paymenthash: ", paymenthash);
-  
-  const preimageHash = getHexBuffer(paymenthash);
+  console.log('paymenthash: ', paymenthash);
+
+  // const preimageHash = getHexBuffer(paymenthash);
   var preimageHashbuffer = Buffer.from(paymenthash, 'hex');
-  console.log("getHexBuffer preimageHash ", paymenthash)
-  console.log("preimageHashbuffer ", preimageHashbuffer)
+  console.log('getHexBuffer preimageHash ', paymenthash);
+  console.log('preimageHashbuffer ', preimageHashbuffer);
   // const amount = BN.from(swapResponse.expectedAmount).div(etherDecimals);
   // const amount = BN.from(swapResponse.expectedAmount).div(zdecimals);
   const amount = BN.from(swapResponse.expectedAmount).mul(etherDecimals);
-  console.log("amount ", amount, swapResponse.expectedAmount);
+  console.log('amount ', amount, swapResponse.expectedAmount);
 
   const timeout = web3.utils.numberToHex(swapResponse.timeoutBlockHeight);
-  console.log("timeout ", timeout)
+  console.log('timeout ', timeout);
 
-  console.log("web3.eth.accounts.currentProvider.selectedAddress ", web3.eth.accounts.currentProvider.selectedAddress);
+  console.log(
+    'web3.eth.accounts.currentProvider.selectedAddress ',
+    web3.eth.accounts.currentProvider.selectedAddress
+  );
 
-  const tokenAddress = Buffer.from(swapResponse.redeemScript, 'hex').toString('utf8');
+  const tokenAddress = Buffer.from(swapResponse.redeemScript, 'hex').toString(
+    'utf8'
+  );
   console.log('tokenAddress: ', tokenAddress);
   // const boltzAddress = "await getBoltzAddress()";
   // console.log("boltzAddress: ", boltzAddress);
@@ -233,288 +403,288 @@ export const lockTokens = async (swapInfo, swapResponse) => {
 
   var erc20swapabi = [
     {
-      "anonymous": false,
-      "inputs": [
+      anonymous: false,
+      inputs: [
         {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "indexed": false,
-          "internalType": "bytes32",
-          "name": "preimage",
-          "type": "bytes32"
-        }
+          indexed: false,
+          internalType: 'bytes32',
+          name: 'preimage',
+          type: 'bytes32',
+        },
       ],
-      "name": "Claim",
-      "type": "event"
+      name: 'Claim',
+      type: 'event',
     },
     {
-      "anonymous": false,
-      "inputs": [
+      anonymous: false,
+      inputs: [
         {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          indexed: false,
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "indexed": false,
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          indexed: false,
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "indexed": false,
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          indexed: false,
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "refundAddress",
-          "type": "address"
+          indexed: true,
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          indexed: false,
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "Lockup",
-      "type": "event"
+      name: 'Lockup',
+      type: 'event',
     },
     {
-      "anonymous": false,
-      "inputs": [
+      anonymous: false,
+      inputs: [
         {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
-        }
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
       ],
-      "name": "Refund",
-      "type": "event"
+      name: 'Refund',
+      type: 'event',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimage",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimage',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "refundAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "claim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      name: 'claim',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "refundAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "hashValues",
-      "outputs": [
+      name: 'hashValues',
+      outputs: [
         {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
+        },
       ],
-      "stateMutability": "pure",
-      "type": "function"
+      stateMutability: 'pure',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "lock",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      name: 'lock',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address payable",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address payable',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "lockPrepayMinerfee",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
+      name: 'lockPrepayMinerfee',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "refund",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      name: 'refund',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
+        },
       ],
-      "name": "swaps",
-      "outputs": [
+      name: 'swaps',
+      outputs: [
         {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
       ],
-      "stateMutability": "view",
-      "type": "function"
+      stateMutability: 'view',
+      type: 'function',
     },
     {
-      "inputs": [],
-      "name": "version",
-      "outputs": [
+      inputs: [],
+      name: 'version',
+      outputs: [
         {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
+          internalType: 'uint8',
+          name: '',
+          type: 'uint8',
+        },
       ],
-      "stateMutability": "view",
-      "type": "function"
-    }
+      stateMutability: 'view',
+      type: 'function',
+    },
   ];
   // erc20swapaddress
   var erc20swapcontract = new web3.eth.Contract(
@@ -532,7 +702,7 @@ export const lockTokens = async (swapInfo, swapResponse) => {
     swapResponse.address
   );
   // , chainId: 33
-  let lastBlockGasLimit = web3.eth.getBlock("latest").gasLimit || 0;
+  let lastBlockGasLimit = web3.eth.getBlock('latest').gasLimit || 0;
   let gasLimit = Math.max(lastBlockGasLimit, 100000);
   erc20swapcontract.methods
     .lock(
@@ -555,10 +725,9 @@ export const lockTokens = async (swapInfo, swapResponse) => {
 };
 
 export const claimFunds = async (swapInfo, swapResponse) => {
-
-  const providerOptions = {
-    /* See Provider Options Section */
-  };
+  // const providerOptions = {
+  //   /* See Provider Options Section */
+  // };
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -572,7 +741,7 @@ export const claimFunds = async (swapInfo, swapResponse) => {
   const web3 = new Web3(provider);
   // console.log("web3 ready: ", web3);
 
-  console.log("claimFunds swapInfo, swapResponse ", swapInfo, swapResponse);
+  console.log('claimFunds swapInfo, swapResponse ', swapInfo, swapResponse);
 
   // const signer = this.connectEthereum(this.provider, this.provider.address);
   // const { etherSwap, erc20Swap, token } = this.getContracts(signer);
@@ -590,18 +759,21 @@ export const claimFunds = async (swapInfo, swapResponse) => {
   //     }
   // }
   // console.log("paymenthash: ", paymenthash);
-  
+
   const preimage = getHexBuffer(swapInfo.preimage);
   var preimageBuffer = Buffer.from(preimage, 'hex');
   // console.log("getHexBuffer preimage ", paymenthash)
-  console.log("preimageBuffer ", preimageBuffer)
+  console.log('preimageBuffer ', preimageBuffer);
   const amount = BN.from(swapResponse.onchainAmount).mul(etherDecimals);
-  console.log("amount ", amount)
+  console.log('amount ', amount);
 
   const timeout = web3.utils.numberToHex(swapResponse.timeoutBlockHeight);
-  console.log("timeout ", timeout)
+  console.log('timeout ', timeout);
 
-  console.log("web3.eth.accounts.currentProvider.selectedAddress ", web3.eth.accounts.currentProvider.selectedAddress);
+  console.log(
+    'web3.eth.accounts.currentProvider.selectedAddress ',
+    web3.eth.accounts.currentProvider.selectedAddress
+  );
 
   // const boltzAddress = "await getBoltzAddress()";
   // console.log("boltzAddress: ", boltzAddress);
@@ -616,26 +788,191 @@ export const claimFunds = async (swapInfo, swapResponse) => {
   // claimAddress: string,
   // timelock: BigNumberish,
 
-  var rbtcswapabi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"indexed":false,"internalType":"bytes32","name":"preimage","type":"bytes32"}],"name":"Claim","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"address","name":"claimAddress","type":"address"},{"indexed":true,"internalType":"address","name":"refundAddress","type":"address"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"Lockup","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"preimageHash","type":"bytes32"}],"name":"Refund","type":"event"},{"inputs":[{"internalType":"bytes32","name":"preimage","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"refundAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"address","name":"refundAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"hashValues","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"lock","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"address payable","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"uint256","name":"prepayAmount","type":"uint256"}],"name":"lockPrepayMinerfee","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"preimageHash","type":"bytes32"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"claimAddress","type":"address"},{"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"refund","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"swaps","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"version","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}];
+  var rbtcswapabi = [
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
+        {
+          indexed: false,
+          internalType: 'bytes32',
+          name: 'preimage',
+          type: 'bytes32',
+        },
+      ],
+      name: 'Claim',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
+        },
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
+        },
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
+        },
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
+      ],
+      name: 'Lockup',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
+      ],
+      name: 'Refund',
+      type: 'event',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimage', type: 'bytes32' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+        { internalType: 'address', name: 'refundAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'claim',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+        { internalType: 'address', name: 'claimAddress', type: 'address' },
+        { internalType: 'address', name: 'refundAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'hashValues',
+      outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+      stateMutability: 'pure',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        { internalType: 'address', name: 'claimAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'lock',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        {
+          internalType: 'address payable',
+          name: 'claimAddress',
+          type: 'address',
+        },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+        { internalType: 'uint256', name: 'prepayAmount', type: 'uint256' },
+      ],
+      name: 'lockPrepayMinerfee',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        { internalType: 'bytes32', name: 'preimageHash', type: 'bytes32' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+        { internalType: 'address', name: 'claimAddress', type: 'address' },
+        { internalType: 'uint256', name: 'timelock', type: 'uint256' },
+      ],
+      name: 'refund',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+      name: 'swaps',
+      outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'version',
+      outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ];
   // rbtcswapaddress
-  var rbtcswapcontract = new web3.eth.Contract(rbtcswapabi, swapResponse.lockupAddress);
-  console.log("rbtc claiming with ", preimageBuffer, amount, swapResponse.refundAddress, timeout ," from contract ", swapResponse.lockupAddress);
+  var rbtcswapcontract = new web3.eth.Contract(
+    rbtcswapabi,
+    swapResponse.lockupAddress
+  );
+  console.log(
+    'rbtc claiming with ',
+    preimageBuffer,
+    amount,
+    swapResponse.refundAddress,
+    timeout,
+    ' from contract ',
+    swapResponse.lockupAddress
+  );
   // , chainId: 33
-  let lastBlockGasLimit = web3.eth.getBlock("latest").gasLimit || 0;
+  let lastBlockGasLimit = web3.eth.getBlock('latest').gasLimit || 0;
   let gasLimit = Math.max(lastBlockGasLimit, 100000);
-  console.log("lastBlockGasLimit, gasLimit: ", lastBlockGasLimit, gasLimit);
-  rbtcswapcontract.methods.claim(preimageBuffer, amount, swapResponse.refundAddress, timeout)
-  .send({from: web3.eth.accounts.currentProvider.selectedAddress, gas: gasLimit}, function(error, transactionHash){
-    console.log("error: ", error);
-    console.log("transactionHash: ", transactionHash);
-  });
-}
+  console.log('lastBlockGasLimit, gasLimit: ', lastBlockGasLimit, gasLimit);
+  rbtcswapcontract.methods
+    .claim(preimageBuffer, amount, swapResponse.refundAddress, timeout)
+    .send(
+      {
+        from: web3.eth.accounts.currentProvider.selectedAddress,
+        gas: gasLimit,
+      },
+      function(error, transactionHash) {
+        console.log('error: ', error);
+        console.log('transactionHash: ', transactionHash);
+      }
+    );
+};
 
 export const claimTokens = async (swapInfo, swapResponse) => {
-
-  const providerOptions = {
-    /* See Provider Options Section */
-  };
+  // const providerOptions = {
+  //   /* See Provider Options Section */
+  // };
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -649,7 +986,7 @@ export const claimTokens = async (swapInfo, swapResponse) => {
   const web3 = new Web3(provider);
   // console.log("web3 ready: ", web3);
 
-  console.log("claimTokens swapInfo, swapResponse ", swapInfo, swapResponse);
+  console.log('claimTokens swapInfo, swapResponse ', swapInfo, swapResponse);
 
   // const signer = this.connectEthereum(this.provider, this.provider.address);
   // const { etherSwap, erc20Swap, token } = this.getContracts(signer);
@@ -667,20 +1004,25 @@ export const claimTokens = async (swapInfo, swapResponse) => {
   //     }
   // }
   // console.log("paymenthash: ", paymenthash);
-  
+
   const preimage = getHexBuffer(swapInfo.preimage);
   var preimageBuffer = Buffer.from(preimage, 'hex');
   // console.log("getHexBuffer preimage ", paymenthash)
-  console.log("preimageBuffer ", preimageBuffer)
+  console.log('preimageBuffer ', preimageBuffer);
   const amount = BN.from(swapResponse.onchainAmount).mul(etherDecimals);
-  console.log("amount ", amount)
+  console.log('amount ', amount);
 
   const timeout = web3.utils.numberToHex(swapResponse.timeoutBlockHeight);
-  console.log("timeout ", timeout)
+  console.log('timeout ', timeout);
 
-  console.log("web3.eth.accounts.currentProvider.selectedAddress ", web3.eth.accounts.currentProvider.selectedAddress);
+  console.log(
+    'web3.eth.accounts.currentProvider.selectedAddress ',
+    web3.eth.accounts.currentProvider.selectedAddress
+  );
 
-  const tokenAddress = Buffer.from(swapResponse.redeemScript, 'hex').toString('utf8');
+  const tokenAddress = Buffer.from(swapResponse.redeemScript, 'hex').toString(
+    'utf8'
+  );
   console.log('tokenAddress: ', tokenAddress);
 
   // const boltzAddress = "await getBoltzAddress()";
@@ -698,303 +1040,327 @@ export const claimTokens = async (swapInfo, swapResponse) => {
 
   var erc20swapabi = [
     {
-      "anonymous": false,
-      "inputs": [
+      anonymous: false,
+      inputs: [
         {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "indexed": false,
-          "internalType": "bytes32",
-          "name": "preimage",
-          "type": "bytes32"
-        }
+          indexed: false,
+          internalType: 'bytes32',
+          name: 'preimage',
+          type: 'bytes32',
+        },
       ],
-      "name": "Claim",
-      "type": "event"
+      name: 'Claim',
+      type: 'event',
     },
     {
-      "anonymous": false,
-      "inputs": [
+      anonymous: false,
+      inputs: [
         {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          indexed: false,
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "indexed": false,
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          indexed: false,
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "indexed": false,
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          indexed: false,
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "refundAddress",
-          "type": "address"
+          indexed: true,
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          indexed: false,
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "Lockup",
-      "type": "event"
+      name: 'Lockup',
+      type: 'event',
     },
     {
-      "anonymous": false,
-      "inputs": [
+      anonymous: false,
+      inputs: [
         {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
-        }
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
+        },
       ],
-      "name": "Refund",
-      "type": "event"
+      name: 'Refund',
+      type: 'event',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimage",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimage',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "refundAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "claim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      name: 'claim',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "refundAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'refundAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "hashValues",
-      "outputs": [
+      name: 'hashValues',
+      outputs: [
         {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
+        },
       ],
-      "stateMutability": "pure",
-      "type": "function"
+      stateMutability: 'pure',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "lock",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      name: 'lock',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address payable",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address payable',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "lockPrepayMinerfee",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
+      name: 'lockPrepayMinerfee',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "preimageHash",
-          "type": "bytes32"
+          internalType: 'bytes32',
+          name: 'preimageHash',
+          type: 'bytes32',
         },
         {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
         },
         {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'tokenAddress',
+          type: 'address',
         },
         {
-          "internalType": "address",
-          "name": "claimAddress",
-          "type": "address"
+          internalType: 'address',
+          name: 'claimAddress',
+          type: 'address',
         },
         {
-          "internalType": "uint256",
-          "name": "timelock",
-          "type": "uint256"
-        }
+          internalType: 'uint256',
+          name: 'timelock',
+          type: 'uint256',
+        },
       ],
-      "name": "refund",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      name: 'refund',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
     },
     {
-      "inputs": [
+      inputs: [
         {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
+        },
       ],
-      "name": "swaps",
-      "outputs": [
+      name: 'swaps',
+      outputs: [
         {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
       ],
-      "stateMutability": "view",
-      "type": "function"
+      stateMutability: 'view',
+      type: 'function',
     },
     {
-      "inputs": [],
-      "name": "version",
-      "outputs": [
+      inputs: [],
+      name: 'version',
+      outputs: [
         {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
+          internalType: 'uint8',
+          name: '',
+          type: 'uint8',
+        },
       ],
-      "stateMutability": "view",
-      "type": "function"
-    }
+      stateMutability: 'view',
+      type: 'function',
+    },
   ];
   // erc20swapaddress
-  var erc20swapcontract = new web3.eth.Contract(erc20swapabi, swapResponse.lockupAddress);
-  console.log("erc20 claiming with ", preimageBuffer, amount, swapResponse.refundAddress, timeout ," from contract ", swapResponse.lockupAddress);
+  var erc20swapcontract = new web3.eth.Contract(
+    erc20swapabi,
+    swapResponse.lockupAddress
+  );
+  console.log(
+    'erc20 claiming with ',
+    preimageBuffer,
+    amount,
+    swapResponse.refundAddress,
+    timeout,
+    ' from contract ',
+    swapResponse.lockupAddress
+  );
   // , chainId: 33
-  let lastBlockGasLimit = web3.eth.getBlock("latest").gasLimit || 0;
+  let lastBlockGasLimit = web3.eth.getBlock('latest').gasLimit || 0;
   let gasLimit = Math.max(lastBlockGasLimit, 100000);
-  console.log("lastBlockGasLimit, gasLimit: ", lastBlockGasLimit, gasLimit);
+  console.log('lastBlockGasLimit, gasLimit: ', lastBlockGasLimit, gasLimit);
   // TODO: need to add tokenaddress to clientside somehow
-  erc20swapcontract.methods.claim(preimageBuffer, amount, tokenAddress, swapResponse.refundAddress, timeout)
-  .send({from: web3.eth.accounts.currentProvider.selectedAddress, gas: gasLimit}, function(error, transactionHash){
-    console.log("error: ", error);
-    console.log("transactionHash: ", transactionHash);
-  });
-}
+  erc20swapcontract.methods
+    .claim(
+      preimageBuffer,
+      amount,
+      tokenAddress,
+      swapResponse.refundAddress,
+      timeout
+    )
+    .send(
+      {
+        from: web3.eth.accounts.currentProvider.selectedAddress,
+        gas: gasLimit,
+      },
+      function(error, transactionHash) {
+        console.log('error: ', error);
+        console.log('transactionHash: ', transactionHash);
+      }
+    );
+};
 
 // Decimals from WEI to 10 ** -8
 export const etherDecimals = BN.from(10).pow(BN.from(10));
@@ -1127,8 +1493,8 @@ export const getFeeEstimation = callback => {
       // .then(response => callback(response.data))
       .then(response => callback(response))
       .catch(error => {
-        console.log("some issue with fee estimation...")
-        callback({"BTC":2,"RBTC":0,"ETH":0})
+        console.log('some issue with fee estimation... ', error);
+        callback({ BTC: 2, RBTC: 0, ETH: 0 });
         // window.alert(
         //   `Failed to get fee estimations: ${error.response.data.error}`
         // );
