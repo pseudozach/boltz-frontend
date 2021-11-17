@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import Link from '../../../components/link';
 import View from '../../../components/view';
-import { getCurrencyName, getExplorer, claimFunds } from '../../../utils';
+import { getCurrencyName, getExplorer, claimFunds, claimTokens } from '../../../utils';
 import Button from '../../../components/button';
 
 const styles = () => ({
@@ -76,7 +76,13 @@ class LockingFunds extends React.Component {
                 className={classes.contractButton}
                 text={'Claim'}
                 // error={error || inputError}
-                onPress={() => claimFunds(swapInfo, swapResponse)}
+                // onPress={() => claimFunds(swapInfo, swapResponse)}
+                // onClick={() =>
+                onPress={() =>
+                  swapInfo.quote === 'RBTC'
+                    ? claimFunds(swapInfo, swapResponse)
+                    : claimTokens(swapInfo, swapResponse)
+                }
                 // errorText={errorMessage}
               />
             </p>

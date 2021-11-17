@@ -97,6 +97,8 @@ class Swap extends Component {
                     redeemScript={swapResponse.redeemScript}
                     privateKey={swapInfo.keys.privateKey}
                     timeoutBlockHeight={swapResponse.timeoutBlockHeight}
+                    swapInfo={swapInfo}
+                    swapResponse={swapResponse}
                   />
                 )}
               />

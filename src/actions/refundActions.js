@@ -9,6 +9,8 @@ import {
   getNetwork,
   getFeeEstimation,
   getExplorer,
+  refundFunds,
+  refundTokens,
 } from '../utils';
 
 const verifyRefundFile = (fileJSON, keys) => {
@@ -107,53 +109,60 @@ export const startRefund = (
   destinationAddress,
   cb
 ) => {
-  const url = `${boltzApi}/gettransaction`;
-  const currency = refundFile.currency;
+  console.log(`startRefund: `, refundFile, transactionHash, destinationAddress);
 
-  return dispatch => {
-    dispatch(refundRequest());
-    axios
-      .post(url, {
-        currency,
-        transactionId: transactionHash,
-      })
-      .then(response => {
-        dispatch(
-          getFeeEstimation(feeEstimation => {
-            const {
-              refundTransaction,
-              lockupTransactionId,
-            } = createRefundTransaction(
-              refundFile,
-              response,
-              destinationAddress,
-              currency,
-              feeEstimation
-            );
+  if (refundFile.currency == 'RBTC') {
+    refundFunds(refundFile.swapInfo, refundFile.swapResponse);
+  } else {
+    refundTokens(refundFile.swapInfo, refundFile.swapResponse);
+  }
+  // const url = `${boltzApi}/gettransaction`;
+  // const currency = refundFile.currency;
 
-            dispatch(setRefundTransactionHash(refundTransaction.getId()));
-            dispatch(
-              broadcastRefund(
-                currency,
-                refundTransaction.toHex(),
-                lockupTransactionId,
-                () => {
-                  dispatch(refundResponse(true, response.data));
+  // return dispatch => {
+  //   dispatch(refundRequest());
+  //   axios
+  //     .post(url, {
+  //       currency,
+  //       transactionId: transactionHash,
+  //     })
+  //     .then(response => {
+  //       dispatch(
+  //         getFeeEstimation(feeEstimation => {
+  //           const {
+  //             refundTransaction,
+  //             lockupTransactionId,
+  //           } = createRefundTransaction(
+  //             refundFile,
+  //             response,
+  //             destinationAddress,
+  //             currency,
+  //             feeEstimation
+  //           );
 
-                  cb();
-                }
-              )
-            );
-          })
-        );
-      })
-      .catch(error => {
-        const message = error.response.data.error;
+  //           dispatch(setRefundTransactionHash(refundTransaction.getId()));
+  //           dispatch(
+  //             broadcastRefund(
+  //               currency,
+  //               refundTransaction.toHex(),
+  //               lockupTransactionId,
+  //               () => {
+  //                 dispatch(refundResponse(true, response.data));
 
-        window.alert(`Failed to refund swap: ${message}`);
-        dispatch(refundResponse(false, message));
-      });
-  };
+  //                 cb();
+  //               }
+  //             )
+  //           );
+  //         })
+  //       );
+  //     })
+  //     .catch(error => {
+  //       const message = error.response.data.error;
+
+  //       window.alert(`Failed to refund swap: ${message}`);
+  //       dispatch(refundResponse(false, message));
+  //     });
+  // };
 };
 
 const broadcastRefund = (currency, transactionHex, lockupTransactionId, cb) => {
