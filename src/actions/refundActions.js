@@ -107,56 +107,55 @@ export const startRefund = (
   destinationAddress,
   cb
 ) => {
+  console.log(refundFile, transactionHash, destinationAddress);
 
-    
+  // const url = `${boltzApi}/gettransaction`;
+  // const currency = refundFile.currency;
 
-  const url = `${boltzApi}/gettransaction`;
-  const currency = refundFile.currency;
+  // return dispatch => {
+  //   dispatch(refundRequest());
+  //   axios
+  //     .post(url, {
+  //       currency,
+  //       transactionId: transactionHash,
+  //     })
+  //     .then(response => {
+  //       dispatch(
+  //         getFeeEstimation(feeEstimation => {
+  //           const {
+  //             refundTransaction,
+  //             lockupTransactionId,
+  //           } = createRefundTransaction(
+  //             refundFile,
+  //             response,
+  //             destinationAddress,
+  //             currency,
+  //             feeEstimation
+  //           );
 
-  return dispatch => {
-    dispatch(refundRequest());
-    axios
-      .post(url, {
-        currency,
-        transactionId: transactionHash,
-      })
-      .then(response => {
-        dispatch(
-          getFeeEstimation(feeEstimation => {
-            const {
-              refundTransaction,
-              lockupTransactionId,
-            } = createRefundTransaction(
-              refundFile,
-              response,
-              destinationAddress,
-              currency,
-              feeEstimation
-            );
+  //           dispatch(setRefundTransactionHash(refundTransaction.getId()));
+  //           dispatch(
+  //             broadcastRefund(
+  //               currency,
+  //               refundTransaction.toHex(),
+  //               lockupTransactionId,
+  //               () => {
+  //                 dispatch(refundResponse(true, response.data));
 
-            dispatch(setRefundTransactionHash(refundTransaction.getId()));
-            dispatch(
-              broadcastRefund(
-                currency,
-                refundTransaction.toHex(),
-                lockupTransactionId,
-                () => {
-                  dispatch(refundResponse(true, response.data));
+  //                 cb();
+  //               }
+  //             )
+  //           );
+  //         })
+  //       );
+  //     })
+  //     .catch(error => {
+  //       const message = error.response.data.error;
 
-                  cb();
-                }
-              )
-            );
-          })
-        );
-      })
-      .catch(error => {
-        const message = error.response.data.error;
-
-        window.alert(`Failed to refund swap: ${message}`);
-        dispatch(refundResponse(false, message));
-      });
-  };
+  //       window.alert(`Failed to refund swap: ${message}`);
+  //       dispatch(refundResponse(false, message));
+  //     });
+  // };
 };
 
 const broadcastRefund = (currency, transactionHex, lockupTransactionId, cb) => {

@@ -64,8 +64,11 @@ class StyledDownloadRefund extends React.Component {
       privateKey,
       redeemScript,
       timeoutBlockHeight,
+      swapInfo,
+      swapResponse,
     } = this.props;
 
+    console.log('downloadrefund.71 swapInfo: ', swapInfo);
     createRefundQr();
 
     return (
@@ -80,7 +83,9 @@ class StyledDownloadRefund extends React.Component {
                 currency,
                 privateKey,
                 redeemScript,
-                timeoutBlockHeight
+                timeoutBlockHeight,
+                swapInfo,
+                swapResponse
               )}
               download={'refund.png'}
             >
@@ -108,6 +113,8 @@ StyledDownloadRefund.propTypes = {
   redeemScript: PropTypes.string.isRequired,
   privateKey: PropTypes.string.isRequired,
   timeoutBlockHeight: PropTypes.number.isRequired,
+  swapInfo: PropTypes.object,
+  swapResponse: PropTypes.object,
 };
 
 const DownloadRefund = injectSheet(DownloadRefundStyles)(StyledDownloadRefund);
