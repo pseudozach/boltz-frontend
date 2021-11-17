@@ -107,6 +107,9 @@ export const startRefund = (
   destinationAddress,
   cb
 ) => {
+
+    
+
   const url = `${boltzApi}/gettransaction`;
   const currency = refundFile.currency;
 
