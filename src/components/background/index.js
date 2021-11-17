@@ -30,7 +30,13 @@ const styles = theme => ({
 const BackGround = ({ classes, showFooter, children }) => (
   <View className={classes.wrapper}>
     {children}
-    {showFooter ? <span className={classes.boltz}>#reckless</span> : undefined}
+    {showFooter ? (
+      <span className={classes.boltz}>
+        BEWARE: this software is experimental and in beta phase.
+      </span>
+    ) : (
+      undefined
+    )}
   </View>
 );
 
