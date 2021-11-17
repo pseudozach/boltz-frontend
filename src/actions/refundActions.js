@@ -9,6 +9,8 @@ import {
   getNetwork,
   getFeeEstimation,
   getExplorer,
+  refundFunds,
+  refundTokens,
 } from '../utils';
 
 const verifyRefundFile = (fileJSON, keys) => {
@@ -107,8 +109,13 @@ export const startRefund = (
   destinationAddress,
   cb
 ) => {
-  console.log(refundFile, transactionHash, destinationAddress);
+  console.log(`startRefund: `, refundFile, transactionHash, destinationAddress);
 
+  if (refundFile.currency == 'RBTC') {
+    refundFunds(refundFile.swapInfo, refundFile.swapResponse);
+  } else {
+    refundTokens(refundFile.swapInfo, refundFile.swapResponse);
+  }
   // const url = `${boltzApi}/gettransaction`;
   // const currency = refundFile.currency;
 

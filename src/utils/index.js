@@ -1915,24 +1915,29 @@ export const refundFunds = async (swapInfo, swapResponse) => {
     swapResponse.address
   );
   console.log(
-    'rbtc locking with ',
+    'rbtc refunding with ',
     preimageHashbuffer,
     swapResponse.claimAddress.toLowerCase(),
     timeout,
-    'to contract ',
+    'from contract ',
     swapResponse.address
   );
   // , chainId: 33
   rbtcswapcontract.methods
-    .lock(preimageHashbuffer, swapResponse.claimAddress.toLowerCase(), timeout)
+    .refund(
+      preimageHashbuffer,
+      amount,
+      swapResponse.claimAddress.toLowerCase(),
+      timeout
+    )
     .send(
       {
         from: web3.eth.accounts.currentProvider.selectedAddress,
-        value: amount,
+        // value: amount,
       },
       function(error, transactionHash) {
-        console.log('error: ', error);
-        console.log('transactionHash: ', transactionHash);
+        console.log('refund error: ', error);
+        console.log('refund transactionHash: ', transactionHash);
       }
     );
 };
@@ -2618,52 +2623,52 @@ export const refundTokens = async (swapInfo, swapResponse) => {
     swapResponse.address
   );
   console.log(
-    'erc20 approving ',
-    amount + ' on token ' + tokenAddress,
-    'erc20 locking with ',
+    // 'erc20 approving ',
+    // amount + ' on token ' + tokenAddress,
+    'erc20 refund with ',
     preimageHashbuffer,
     amount,
     tokenAddress.toLowerCase(),
     swapResponse.claimAddress.toLowerCase(),
     timeout,
-    'to contract ',
+    'from contract ',
     swapResponse.address
   );
   // , chainId: 33
   let lastBlockGasLimit = web3.eth.getBlock('latest').gasLimit || 0;
   let gasLimit = Math.max(lastBlockGasLimit, 100000);
 
-  erc20tokencontract.methods.approve(swapResponse.address, amount).send(
-    {
-      from: web3.eth.accounts.currentProvider.selectedAddress,
-      gas: gasLimit,
-    },
-    function(error, transactionHash) {
-      console.log('approve error: ', error);
-      console.log('approve transactionHash: ', transactionHash);
+  erc20swapcontract.methods
+    .refund(
+      preimageHashbuffer,
+      amount,
+      tokenAddress.toLowerCase(),
+      swapResponse.claimAddress.toLowerCase(),
+      timeout
+    )
+    .send(
+      {
+        from: web3.eth.accounts.currentProvider.selectedAddress,
+        gas: gasLimit,
+      },
+      function(error, transactionHash) {
+        console.log('refund error: ', error);
+        console.log('refund transactionHash: ', transactionHash);
+      }
+    );
 
-      erc20swapcontract.methods
-        .lock(
-          preimageHashbuffer,
-          amount,
-          tokenAddress.toLowerCase(),
-          swapResponse.claimAddress.toLowerCase(),
-          timeout
-        )
-        .send(
-          {
-            from: web3.eth.accounts.currentProvider.selectedAddress,
-            gas: gasLimit,
-          },
-          function(error, transactionHash) {
-            console.log('lock error: ', error);
-            console.log('lock transactionHash: ', transactionHash);
-          }
-        );
-    }
-  );
+  // erc20tokencontract.methods.approve(swapResponse.address, amount).send(
+  //   {
+  //     from: web3.eth.accounts.currentProvider.selectedAddress,
+  //     gas: gasLimit,
+  //   },
+  //   function(error, transactionHash) {
+  //     console.log('approve error: ', error);
+  //     console.log('approve transactionHash: ', transactionHash);
+
+  //   }
+  // );
 };
-
 
 // Decimals from WEI to 10 ** -8
 export const etherDecimals = BN.from(10).pow(BN.from(10));
