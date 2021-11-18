@@ -4,7 +4,14 @@ import injectSheet from 'react-jss';
 import { address } from 'bitcoinjs-lib';
 import View from '../../../components/view';
 import InputArea from '../../../components/inputarea';
-import { getCurrencyName, getSampleAddress, getNetwork } from '../../../utils';
+import {
+  getCurrencyName,
+  getSampleAddress,
+  getNetwork,
+  connectWallet,
+} from '../../../utils';
+import Button from '../../../components/button';
+// import { FaWallet } from 'react-icons/fa';
 
 const inputAddressStyles = () => ({
   wrapper: {
@@ -18,6 +25,13 @@ const inputAddressStyles = () => ({
     '@media (max-width: 425px)': {
       fontSize: '16px',
     },
+    textAlign: 'center',
+    marginBlockEnd: '0',
+  },
+  contractButton: {
+    background: 'black',
+    margin: '4px',
+    borderRadius: '5px',
   },
 });
 
@@ -41,6 +55,7 @@ class StyledInputAddress extends React.Component {
       } catch (error) {}
     }
 
+    console.log('inputaddress setstate ', swapAddress, error, onChange);
     this.setState({ error });
     onChange(swapAddress, error);
   };
@@ -53,8 +68,23 @@ class StyledInputAddress extends React.Component {
       <View className={classes.wrapper}>
         <p className={classes.title}>
           Paste or scan a <b>{getCurrencyName(swapInfo.quote)}</b> address to
-          which you want to receive
+          which you want to receive <br /> {'OR'}
         </p>
+        <Button
+          className={classes.contractButton}
+          text={'Connect Wallet'}
+          // error={error || inputError}
+          onPress={async () => {
+            let account = await connectWallet();
+            console.log('onpress account ', account);
+            this.onChange(account, false);
+            // document.getElementById('inputAddressia').value = account;
+            document.getElementsByTagName('textarea')[0].value = account;
+          }}
+          // errorText={errorMessage}
+        >
+          {/* <FaWallet size={25} color="#FFFF00" /> */}
+        </Button>
         <InputArea
           width={600}
           autoFocus={true}
