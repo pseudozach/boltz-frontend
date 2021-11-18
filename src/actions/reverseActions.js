@@ -87,7 +87,7 @@ export const startReverseSwap = (swapInfo, nextStage, timelockExpired) => {
         invoiceAmount: amount,
         orderSide: pair.orderSide,
         claimPublicKey: keys.publicKey,
-        claimAddress: swapInfo.address,
+        claimAddress: swapInfo.address.toLowerCase(),
         preimageHash: swapInfo.preimageHash,
       })
       .then(response => {

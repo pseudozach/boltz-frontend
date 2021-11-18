@@ -29,6 +29,7 @@ class StyledInputAddress extends React.Component {
   onChange = input => {
     const { onChange, swapInfo } = this.props;
     const swapAddress = input.trim();
+    // .toLowerCase()
 
     let error = true;
 
