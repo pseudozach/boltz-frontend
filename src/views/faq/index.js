@@ -145,7 +145,7 @@ class Faq extends React.Component {
                     name={'BTC LND node'}
                     size={150}
                     uri={bitcoinLnd}
-                    // onionUri={bitcoinLndOnion}
+                    onionUri={bitcoinLndOnion}
                   />
                   {/* <NodeInfo
                     name={'LTC LND node'}
@@ -166,7 +166,8 @@ class Faq extends React.Component {
                   the onchain parts of the Submarine Swaps and an additional fee
                   which is a percentage of the traded amount and goes to our
                   pocket for providing a <i>(hopefully)</i> useful service to
-                  our users.
+                  our users. It also helps us cover infrastructure/maintenance costs, 
+                  channel open/close costs and provide liquidity.
                 </p>
               )}
             />
