@@ -55,7 +55,7 @@ class StyledInputAddress extends React.Component {
       } catch (error) {}
     }
 
-    console.log('inputaddress setstate ', swapAddress, error, onChange);
+    // console.log('inputaddress setstate ', swapAddress, error, onChange);
     this.setState({ error });
     onChange(swapAddress, error);
   };
@@ -75,11 +75,11 @@ class StyledInputAddress extends React.Component {
           text={'Connect Wallet'}
           // error={error || inputError}
           onPress={async () => {
-            let account = await connectWallet();
-            console.log('onpress account ', account);
-            this.onChange(account, false);
+            let w3 = await connectWallet();
+            console.log('onpress account ', w3);
+            this.onChange(w3.account, false);
             // document.getElementById('inputAddressia').value = account;
-            document.getElementsByTagName('textarea')[0].value = account;
+            document.getElementsByTagName('textarea')[0].value = w3.account;
           }}
           // errorText={errorMessage}
         >

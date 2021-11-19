@@ -18,6 +18,10 @@ import {
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import Torus from '@toruslabs/torus-embed';
+import { trezorProviderOptions } from '@rsksmart/rlogin-trezor-provider';
+import { ledgerProviderOptions } from '@rsksmart/rlogin-ledger-provider';
+import { dcentProviderOptions } from '@rsksmart/rlogin-dcent-provider';
 
 // import { ContractABIs } from 'boltz-core';
 // // @ts-ignore
@@ -29,47 +33,67 @@ import { BigNumber as BN } from 'ethers';
 
 import lightningPayReq from 'bolt11';
 
+let w3;
 export const connectWallet = async () => {
-  const web3Modal = new Web3Modal({
-    // network: "mainnet", // optional
-    // cacheProvider: true, // optional
-    providerOptions: {
-      walletconnect: {
-        package: WalletConnectProvider, // setup wallet connect for mobile wallet support
-        options: {
-          rpc: {
-            // 30: 'https://public-node.rsk.co', // use RSK public nodes to connect
-            33: 'https://4444-blush-grasshopper-om700bdq.ws-us18.gitpod.io/', // gitpod node for testing
+  if (!w3) {
+    const web3Modal = new Web3Modal({
+      // network: "mainnet", // optional
+      // cacheProvider: true, // optional
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider, // setup wallet connect for mobile wallet support
+          options: {
+            rpc: {
+              30: 'https://public-node.rsk.co', // use RSK public nodes to connect
+              // 33: 'https://4444-kumquat-horse-natda5vs.ws-us18.gitpod.io', // gitpod node for testing
+            },
           },
         },
+        metamask: {},
+        liquality: {},
+        // torus: {
+        //   package: Torus,
+        // },
+        // 'custom-ledger': ledgerProviderOptions,
+        // 'custom-dcent': dcentProviderOptions,
+        // 'custom-trezor': {
+        //   ...trezorProviderOptions,
+        //   options: {
+        //     manifestEmail: 'info@lnsov.vercel.app',
+        //     manifestAppUrl: 'https://lnsov.vercel.app/',
+        //   },
+        // },
       },
-      metamask: {},
-      liquality: {},
-    },
-    supportedChains: [33], // enable rsk regtest
-  });
-  // let clearcache = await web3Modal.clearCachedProvider();
-  // console.log('cache cleared? ', clearcache);
-  // console.log("web3modal defined");
-  const provider = await web3Modal.connect();
-  console.log(`provider `, provider);
-  let account;
-  if (provider.wc) {
-    // walletconnect
-    account = await provider.accounts[0];
-  } else {
-    // liquality/metamask
+      // supportedChains: [33], // enable rsk regtest
+    });
+
+    // let clearcache = await web3Modal.clearCachedProvider();
+    // console.log('cache cleared? ', clearcache);
+
+    // console.log("web3modal defined");
+    const provider = await web3Modal.connect();
+    console.log(`provider `, provider);
+    let account;
     const web3 = new Web3(provider);
-    account = await web3.eth.accounts.currentProvider.selectedAddress;
+    if (provider.wc) {
+      // walletconnect
+      account = await provider.accounts[0];
+    } else {
+      // liquality/metamask
+      account = await web3.eth.accounts.currentProvider.selectedAddress;
+    }
+    console.log(
+      'utils account ',
+      // web3,
+      // web3.eth.accounts.currentProvider.selectedAddress,
+      account,
+      typeof account
+    );
+    w3 = { web3, account };
   }
-  console.log(
-    'utils account ',
-    // web3,
-    // web3.eth.accounts.currentProvider.selectedAddress,
-    account,
-    typeof account
-  );
-  return account;
+  return w3;
+
+  // return account;
 };
 
 export const lockFunds = async (swapInfo, swapResponse) => {
@@ -77,17 +101,23 @@ export const lockFunds = async (swapInfo, swapResponse) => {
   //   /* See Provider Options Section */
   // };
 
-  const web3Modal = new Web3Modal({
-    // network: "mainnet", // optional
-    // cacheProvider: true, // optional
-    // providerOptions // required
-  });
-  // console.log("web3modal defined");
-  const provider = await web3Modal.connect();
-  // console.log("web3 provider ready: ", provider);
+  // // old way
+  // const web3Modal = new Web3Modal({
+  //   // network: "mainnet", // optional
+  //   // cacheProvider: true, // optional
+  //   // providerOptions // required
+  // });
+  // // console.log("web3modal defined");
+  // const provider = await web3Modal.connect();
+  // // console.log("web3 provider ready: ", provider);
+  // const web3 = new Web3(provider);
+  // // console.log("web3 ready: ", web3);
 
-  const web3 = new Web3(provider);
-  // console.log("web3 ready: ", web3);
+  // new way
+  const w3 = await connectWallet();
+  console.log('w3 ready: ', w3);
+  const web3 = w3.web3;
+  console.log('web3 ready: ', web3);
 
   console.log('lockFunds swapInfo, swapResponse ', swapInfo, swapResponse);
 
@@ -380,17 +410,23 @@ export const lockTokens = async (swapInfo, swapResponse) => {
   //   /* See Provider Options Section */
   // };
 
-  const web3Modal = new Web3Modal({
-    // network: "mainnet", // optional
-    // cacheProvider: true, // optional
-    // providerOptions // required
-  });
-  // console.log("web3modal defined");
-  const provider = await web3Modal.connect();
-  // console.log("web3 provider ready: ", provider);
+  // // old way
+  // const web3Modal = new Web3Modal({
+  //   // network: "mainnet", // optional
+  //   // cacheProvider: true, // optional
+  //   // providerOptions // required
+  // });
+  // // console.log("web3modal defined");
+  // const provider = await web3Modal.connect();
+  // // console.log("web3 provider ready: ", provider);
+  // const web3 = new Web3(provider);
+  // // console.log("web3 ready: ", web3);
 
-  const web3 = new Web3(provider);
-  // console.log("web3 ready: ", web3);
+  // new way
+  const w3 = await connectWallet();
+  console.log('w3 ready: ', w3);
+  const web3 = w3.web3;
+  console.log('web3 ready: ', web3);
 
   console.log('lockTokens swapInfo, swapResponse ', swapInfo, swapResponse);
 
@@ -1107,17 +1143,23 @@ export const claimFunds = async (swapInfo, swapResponse) => {
   //   /* See Provider Options Section */
   // };
 
-  const web3Modal = new Web3Modal({
-    // network: "mainnet", // optional
-    // cacheProvider: true, // optional
-    // providerOptions // required
-  });
-  // console.log("web3modal defined");
-  const provider = await web3Modal.connect();
-  // console.log("web3 provider ready: ", provider);
+  // // old way 
+  // const web3Modal = new Web3Modal({
+  //   // network: "mainnet", // optional
+  //   // cacheProvider: true, // optional
+  //   // providerOptions // required
+  // });
+  // // console.log("web3modal defined");
+  // const provider = await web3Modal.connect();
+  // // console.log("web3 provider ready: ", provider);
+  // const web3 = new Web3(provider);
+  // // console.log("web3 ready: ", web3);
 
-  const web3 = new Web3(provider);
-  // console.log("web3 ready: ", web3);
+  // new way
+  const w3 = await connectWallet();
+  console.log('w3 ready: ', w3);
+  const web3 = w3.web3;
+  console.log('web3 ready: ', web3);
 
   console.log('claimFunds swapInfo, swapResponse ', swapInfo, swapResponse);
 
@@ -1337,7 +1379,8 @@ export const claimFunds = async (swapInfo, swapResponse) => {
     .claim(preimageBuffer, amount, swapResponse.refundAddress, timeout)
     .send(
       {
-        from: web3.eth.accounts.currentProvider.selectedAddress,
+        // from: web3.eth.accounts.currentProvider.selectedAddress,
+        from: w3.account,
         gas: gasLimit,
       },
       function(error, transactionHash) {
@@ -1352,18 +1395,24 @@ export const claimTokens = async (swapInfo, swapResponse) => {
   //   /* See Provider Options Section */
   // };
 
-  const web3Modal = new Web3Modal({
-    // network: "mainnet", // optional
-    // cacheProvider: true, // optional
-    // providerOptions // required
-  });
-  // console.log("web3modal defined");
-  const provider = await web3Modal.connect();
-  // console.log("web3 provider ready: ", provider);
+  // // old way
+  // const web3Modal = new Web3Modal({
+  //   // network: "mainnet", // optional
+  //   // cacheProvider: true, // optional
+  //   // providerOptions // required
+  // });
+  // // console.log("web3modal defined");
+  // const provider = await web3Modal.connect();
+  // // console.log("web3 provider ready: ", provider);
+  // const web3 = new Web3(provider);
+  // // console.log("web3 ready: ", web3);
 
-  const web3 = new Web3(provider);
-  // console.log("web3 ready: ", web3);
-
+  // new way
+  const w3 = await connectWallet();
+  console.log('w3 ready: ', w3);
+  const web3 = w3.web3;
+  console.log('web3 ready: ', web3);
+  
   console.log('claimTokens swapInfo, swapResponse ', swapInfo, swapResponse);
 
   // const signer = this.connectEthereum(this.provider, this.provider.address);
@@ -1730,7 +1779,8 @@ export const claimTokens = async (swapInfo, swapResponse) => {
     )
     .send(
       {
-        from: web3.eth.accounts.currentProvider.selectedAddress,
+        // from: web3.eth.accounts.currentProvider.selectedAddress,
+        from: w3.account,
         gas: gasLimit,
       },
       function(error, transactionHash) {
@@ -1745,17 +1795,23 @@ export const refundFunds = async (swapInfo, swapResponse) => {
   //   /* See Provider Options Section */
   // };
 
-  const web3Modal = new Web3Modal({
-    // network: "mainnet", // optional
-    // cacheProvider: true, // optional
-    // providerOptions // required
-  });
-  // console.log("web3modal defined");
-  const provider = await web3Modal.connect();
-  // console.log("web3 provider ready: ", provider);
+  // // old way
+  // const web3Modal = new Web3Modal({
+  //   // network: "mainnet", // optional
+  //   // cacheProvider: true, // optional
+  //   // providerOptions // required
+  // });
+  // // console.log("web3modal defined");
+  // const provider = await web3Modal.connect();
+  // // console.log("web3 provider ready: ", provider);
+  // const web3 = new Web3(provider);
+  // // console.log("web3 ready: ", web3);
 
-  const web3 = new Web3(provider);
-  // console.log("web3 ready: ", web3);
+  // new way
+  const w3 = await connectWallet();
+  console.log('w3 ready: ', w3);
+  const web3 = w3.web3;
+  console.log('web3 ready: ', web3);
 
   console.log('lockFunds swapInfo, swapResponse ', swapInfo, swapResponse);
 
@@ -1976,7 +2032,8 @@ export const refundFunds = async (swapInfo, swapResponse) => {
     )
     .send(
       {
-        from: web3.eth.accounts.currentProvider.selectedAddress,
+        // from: web3.eth.accounts.currentProvider.selectedAddress,
+        from: w3.account,
         // value: amount,
       },
       function(error, transactionHash) {
@@ -1991,17 +2048,23 @@ export const refundTokens = async (swapInfo, swapResponse) => {
   //   /* See Provider Options Section */
   // };
 
-  const web3Modal = new Web3Modal({
-    // network: "mainnet", // optional
-    // cacheProvider: true, // optional
-    // providerOptions // required
-  });
-  // console.log("web3modal defined");
-  const provider = await web3Modal.connect();
-  // console.log("web3 provider ready: ", provider);
+  // // old way
+  // const web3Modal = new Web3Modal({
+  //   // network: "mainnet", // optional
+  //   // cacheProvider: true, // optional
+  //   // providerOptions // required
+  // });
+  // // console.log("web3modal defined");
+  // const provider = await web3Modal.connect();
+  // // console.log("web3 provider ready: ", provider);
+  // const web3 = new Web3(provider);
+  // // console.log("web3 ready: ", web3);
 
-  const web3 = new Web3(provider);
-  // console.log("web3 ready: ", web3);
+  // new way
+  const w3 = await connectWallet();
+  console.log('w3 ready: ', w3);
+  const web3 = w3.web3;
+  console.log('web3 ready: ', web3);
 
   console.log('refundTokens swapInfo, swapResponse ', swapInfo, swapResponse);
 
@@ -2692,7 +2755,8 @@ export const refundTokens = async (swapInfo, swapResponse) => {
     )
     .send(
       {
-        from: web3.eth.accounts.currentProvider.selectedAddress,
+        // from: web3.eth.accounts.currentProvider.selectedAddress,
+        from: w3.account,
         gas: gasLimit,
       },
       function(error, transactionHash) {
