@@ -20,4 +20,4 @@ Mainnet deployment available at: https://lnsov.vercel.app
 
 ## docker
 
-`docker build . -t kristjangrm/lnsovbridge`
+`docker build . -t kristjangrm/lnsovbridge-fe`
