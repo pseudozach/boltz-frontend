@@ -17,3 +17,7 @@ Mainnet deployment available at: https://lnsov.vercel.app
 ## use
 * visit `http://localhost:3000`
 
+
+## docker
+
+`docker build . -t kristjangrm/lnsovbridge`
