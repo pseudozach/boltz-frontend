@@ -36,7 +36,7 @@ class MobileNavigationBar extends React.Component {
               className={''}
               alt="logo"
             />
-            <span className={classes.logoText}>LNSOV</span>
+            <span className={classes.logoText}>Marduk</span>
           </View>
           <MdMenu
             onClick={() => this.toggleMenu()}

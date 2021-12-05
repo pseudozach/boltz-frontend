@@ -62,10 +62,10 @@ class Faq extends React.Component {
           </View>
           <View className={classes.questionTab}>
             <Question
-              title={style => <h1 className={style}>What is LN-SOV Bridge?</h1>}
+              title={style => <h1 className={style}>What is Marduk.exchange?</h1>}
               content={style => (
                 <p className={style}>
-                  LNSOV is an instant and non-custodial crypto currency exchange
+                  Marduk.exchange is an instant and non-custodial crypto currency exchange
                   that focuses on the adoption of second layer scaling
                   technologies like the Lightning network and the privacy of its
                   users. We neither use any trackers nor log any data that could
@@ -177,7 +177,7 @@ class Faq extends React.Component {
               )}
               content={style => (
                 <p className={style}>
-                  LN-SOV Bridge is a fork of <Link to={'https://boltz.exchange'} text={'Boltz'} />. 
+                  Marduk.exchange is a fork of <Link to={'https://boltz.exchange'} text={'Boltz'} />. 
                   We are a team of independent developers working to bridge 
                   the gap between Lightning and Sovryn on RSK.
                   Our work is supported by a grant from Sovryn.
