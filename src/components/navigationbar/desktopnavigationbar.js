@@ -18,7 +18,7 @@ const DeskTopNavigationBar = ({ classes }) => (
         className={classes.img}
         alt="logo"
       />
-      <span className={classes.logoText}>LN - SOV Bridge</span>
+      <span className={classes.logoText}>Marduk.Exchange</span>
       <span className={classes.subLogoText}>{network} beta</span>
     </View>
     <View className={classes.buttons}>
