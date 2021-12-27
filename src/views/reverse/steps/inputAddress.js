@@ -53,6 +53,9 @@ class StyledInputAddress extends React.Component {
         error = false;
         // eslint-disable-next-line no-empty
       } catch (error) {}
+    } 
+    if (swapAddress.includes('0x')) {
+      error = false
     }
 
     // console.log('inputaddress setstate ', swapAddress, error, onChange);
