@@ -90,7 +90,7 @@ class PayInvoice extends React.Component {
           <div />
         ) : (
           <View className={classes.qrwrapper}>
-            <View className={classes.qrcode}>
+            {swapResponse.minerFeeInvoice ? (<View className={classes.qrcode}>
               <DetectResize>
                 {width =>
                   width <= 375 ? (
@@ -100,7 +100,7 @@ class PayInvoice extends React.Component {
                   )
                 }
               </DetectResize>
-            </View>
+            </View>) : null}
             <View className={classes.qrcode}>
               <DetectResize>
                 {width =>
@@ -114,7 +114,7 @@ class PayInvoice extends React.Component {
             </View>
         </View>
         )}
-        <View className={classes.info}>
+        {swapResponse.minerFeeInvoice ? (<View className={classes.info}>
           <p className={classes.title}>
             Pay these 2 {swapInfo.base} Lightning invoices:
           </p>
@@ -130,14 +130,30 @@ class PayInvoice extends React.Component {
             cannot receive the lightning coins unless your browser claims the
             onchain funds for you.
           </p>
-          {/* <p className={classes.invoice} id="copy">
-            {swapResponse.invoice}
-          </p> */}
           <Input value={swapResponse.invoice} disabled={true} id="invoice"/>
-          {/* <span className={classes.action} onClick={() => copyToClipBoard()}>
+        </View>) : 
+        (<View className={classes.info}>
+          <p className={classes.title}>
+            Pay this {swapInfo.base} Lightning invoice:
+          </p>
+          <p className={classes.invoiceInfo}>
+            This is a{' '}
+            <Link
+              text="HOLD invoice"
+              to="https://wiki.ion.radar.tech/tech/research/hodl-invoice"
+            />{' '}
+            and its preimage was generated in your browser. Which means we
+            cannot receive the lightning coins unless your browser claims the
+            onchain funds for you.
+          </p>
+          <p className={classes.invoice} id="copy">
+            {swapResponse.invoice}
+          </p>
+          <span className={classes.action} onClick={() => copyToClipBoard()}>
             Copy
-          </span> */}
-        </View>
+          </span>
+        </View>)
+        }
       </View>
     );
   }
