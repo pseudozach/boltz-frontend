@@ -67,14 +67,14 @@ const SendTransactionStyles = () => ({
 
 const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
   <View className={classes.wrapper}>
-    {swapInfo.base !== 'SOV' && swapInfo.base !== 'RBTC' ? (
+    {swapInfo.base !== 'SOV' && swapInfo.base !== 'RBTC' && swapInfo.base !== 'XUSD' ? (
     <View className={classes.qrcode}>
       <QrCode size={250} link={swapResponse.bip21} />
     </View>
     ): null}
     <View className={classes.info}>
       <p className={classes.text}>
-      {(swapInfo.base === 'SOV' || swapInfo.base === 'RBTC') ? ( 'Lock' ): 'Send' }
+      {(swapInfo.base === 'SOV' || swapInfo.base === 'RBTC' || swapInfo.base === 'XUSD') ? ( 'Lock' ): 'Send' }
         <b>
           {' '}
           {toWholeCoins(swapResponse.expectedAmount)} {swapInfo.base}{' '}
@@ -98,7 +98,7 @@ const StyledSendTransaction = ({ classes, swapInfo, swapResponse }) => (
           </a>
         </p>
       ) : null}
-      {(swapInfo.base === 'SOV' || swapInfo.base === 'RBTC') ? (
+      {(swapInfo.base === 'SOV' || swapInfo.base === 'RBTC' || swapInfo.base === 'XUSD') ? (
         <p className={classes.text}>
           Tap here to trigger Lock Contract Call:{' '}
           {/* <button
