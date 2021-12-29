@@ -241,6 +241,10 @@ const handleReverseSwapStatus = (
       dispatch(reverseSwapResponse(false, {}));
       break;
 
+    case SwapUpdateEvent.MinerFeePaid:
+      dispatch(setReverseSwapStatus('Miner invoice paid'));
+      break;
+
     default:
       console.log(`Unknown swap status: ${JSON.stringify(data)}`);
       break;
