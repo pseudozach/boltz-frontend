@@ -36,6 +36,7 @@ import lightningPayReq from 'bolt11';
 let w3;
 export const connectWallet = async () => {
   if (!w3) {
+    console.log('connectWallet ', w3);
     const web3Modal = new Web3Modal({
       // network: "mainnet", // optional
       // cacheProvider: true, // optional
@@ -70,9 +71,10 @@ export const connectWallet = async () => {
     // let clearcache = await web3Modal.clearCachedProvider();
     // console.log('cache cleared? ', clearcache);
 
-    // console.log("web3modal defined");
+    console.log("web3modal defined ", web3Modal);
     const provider = await web3Modal.connect();
-    console.log(`provider `, provider);
+    // provider
+    console.log(`provider `, );
     let account;
     const web3 = new Web3(provider);
     if (provider.wc) {
@@ -87,7 +89,7 @@ export const connectWallet = async () => {
       // web3,
       // web3.eth.accounts.currentProvider.selectedAddress,
       account,
-      typeof account
+      // typeof account
     );
     w3 = { web3, account };
   }
@@ -1116,7 +1118,9 @@ export const lockTokens = async (swapInfo, swapResponse) => {
       console.log('approve error: ', error);
       console.log('approve transactionHash: ', transactionHash);
 
-      erc20swapcontract.methods
+      // give a small delay for token tx after approval - avoid issue
+      setTimeout(function() {
+        erc20swapcontract.methods
         .lock(
           preimageHashbuffer,
           amount,
@@ -1134,6 +1138,7 @@ export const lockTokens = async (swapInfo, swapResponse) => {
             console.log('lock transactionHash: ', transactionHash);
           }
         );
+      }, 500)
     }
   );
 };
@@ -2061,12 +2066,13 @@ export const refundTokens = async (swapInfo, swapResponse) => {
   // // console.log("web3 ready: ", web3);
 
   // new way
+  console.log('1 refundTokens swapInfo, swapResponse: ', swapInfo, swapResponse);
   const w3 = await connectWallet();
-  console.log('w3 ready: ', w3);
+  // console.log('w3 ready: ', w3);
   const web3 = w3.web3;
-  console.log('web3 ready: ', web3);
+  // console.log('web3 ready: ', web3);
 
-  console.log('refundTokens swapInfo, swapResponse ', swapInfo, swapResponse);
+  console.log('2 refundTokens swapInfo, swapResponse ', swapInfo, swapResponse);
 
   // const signer = this.connectEthereum(this.provider, this.provider.address);
   // const { etherSwap, erc20Swap, token } = this.getContracts(signer);

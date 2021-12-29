@@ -67,7 +67,7 @@ const StyledUploadRefundFile = ({
         />
       </DropZone>
     )}
-    <p className={`${classes.info} ${classes.mobileInfo}`}>
+    {/* <p className={`${classes.info} ${classes.mobileInfo}`}>
       Paste the hash of the lockup transaction
     </p>
     <InputArea
@@ -75,7 +75,7 @@ const StyledUploadRefundFile = ({
       width={500}
       onChange={setTransactionHash}
       placeholder={`EG: ${lockupTransactionHash}`}
-    />
+    /> */}
   </View>
 );
 
