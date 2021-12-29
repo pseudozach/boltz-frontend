@@ -59,7 +59,7 @@ class LockingFunds extends React.Component {
           <Link to={link} text={'Click here'} /> to see the lockup transaction.
           <br />
           <br />
-          {(swapInfo.quote === 'SOV' || swapInfo.quote === 'RBTC') && 
+          {(swapInfo.quote === 'SOV' || swapInfo.quote === 'RBTC' || swapInfo.quote === 'XUSD') && 
           (swapStatus !== 'Could not send onchain coins' && swapStatus !== 'Waiting for confirmation...') ? (
             <p className={classes.text}>
               Lockup is confirmed. 

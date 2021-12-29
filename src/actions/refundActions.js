@@ -103,11 +103,15 @@ const createRefundTransaction = (
   };
 };
 
+export const dummyAction = () => {
+  console.log('dummyAction')
+}
+
 export const startRefund = (
   refundFile,
   transactionHash,
   destinationAddress,
-  cb
+  // cb
 ) => {
   console.log(`startRefund: `, refundFile, transactionHash, destinationAddress);
 
@@ -116,6 +120,8 @@ export const startRefund = (
   } else {
     refundTokens(refundFile.swapInfo, refundFile.swapResponse);
   }
+
+  
   // const url = `${boltzApi}/gettransaction`;
   // const currency = refundFile.currency;
 
@@ -165,38 +171,38 @@ export const startRefund = (
   // };
 };
 
-const broadcastRefund = (currency, transactionHex, lockupTransactionId, cb) => {
-  const url = `${boltzApi}/broadcasttransaction`;
-  return dispatch => {
-    dispatch(refundRequest());
-    axios
-      .post(url, {
-        currency,
-        transactionHex,
-      })
-      .then(() => cb())
-      .catch(response => {
-        const error = response.response.data.error;
-        let message = `Failed to broadcast refund transaction: ${error}`;
+// const broadcastRefund = (currency, transactionHex, lockupTransactionId, cb) => {
+//   const url = `${boltzApi}/broadcasttransaction`;
+//   return dispatch => {
+//     dispatch(refundRequest());
+//     axios
+//       .post(url, {
+//         currency,
+//         transactionHex,
+//       })
+//       .then(() => cb())
+//       .catch(response => {
+//         const error = response.response.data.error;
+//         let message = `Failed to broadcast refund transaction: ${error}`;
 
-        if (
-          error ===
-          'please wait until your lockup transaction has 10 confirmations before you try to refund'
-        ) {
-          message +=
-            '. Click OK to open the lockup transaction in a block explorer';
+//         if (
+//           error ===
+//           'please wait until your lockup transaction has 10 confirmations before you try to refund'
+//         ) {
+//           message +=
+//             '. Click OK to open the lockup transaction in a block explorer';
 
-          const openExplorer = window.confirm(message);
-          if (openExplorer) {
-            window.open(
-              `${getExplorer(currency)}/${lockupTransactionId}`,
-              '_blank'
-            );
-          }
-        } else {
-          window.alert(message);
-        }
-        dispatch(refundResponse(false, message));
-      });
-  };
-};
+//           const openExplorer = window.confirm(message);
+//           if (openExplorer) {
+//             window.open(
+//               `${getExplorer(currency)}/${lockupTransactionId}`,
+//               '_blank'
+//             );
+//           }
+//         } else {
+//           window.alert(message);
+//         }
+//         dispatch(refundResponse(false, message));
+//       });
+//   };
+// };

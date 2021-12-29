@@ -16,6 +16,8 @@ export const SwapUpdateEvent = {
   TransactionConfirmed: 'transaction.confirmed',
 
   SwapExpired: 'swap.expired',
+
+  ChannelCreated: 'channel.created',
 };
 
 export const ServiceWarnings = {

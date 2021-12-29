@@ -66,6 +66,7 @@ export const startSwap = (swapInfo, cb) => {
         orderSide: pair.orderSide,
         invoice: invoice,
         refundPublicKey: keys.publicKey,
+        channel: {auto: true, private: false, inboundLiquidity: 50}
       })
       .then(response => {
         dispatch(swapResponse(true, response.data));
@@ -120,6 +121,15 @@ const handleSwapStatus = (data, source, dispatch, callback) => {
     case SwapUpdateEvent.TransactionClaimed:
       source.close();
       callback();
+      break;
+
+    case SwapUpdateEvent.ChannelCreated:
+      dispatch(
+        setSwapStatus({
+          pending: true,
+          message: 'Channel is being created...',
+        })
+      );
       break;
 
     default:

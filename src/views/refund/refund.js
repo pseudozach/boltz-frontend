@@ -119,13 +119,15 @@ const Refund = ({
                   loading={isFetching || !destinationAddress}
                   text={'Generate refund transaction'}
                   mobile
-                  onPress={() =>
+                  onPress={() =>{
+                    // console.log('refund.js ', refundFile, transactionHash, destinationAddress, props.nextStage)
                     startRefund(
                       refundFile,
                       transactionHash,
                       destinationAddress,
-                      props.nextStage
+                      // props.nextStage,
                     )
+                  }
                   }
                 />
               )}
