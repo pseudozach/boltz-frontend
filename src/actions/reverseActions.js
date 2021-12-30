@@ -242,7 +242,9 @@ const handleReverseSwapStatus = (
       break;
 
     case SwapUpdateEvent.MinerFeePaid:
+      console.log('SwapUpdateEvent.MinerFeePaid');
       dispatch(setReverseSwapStatus('Miner invoice paid'));
+      dispatch(reverseSwapResponse(true, {}));
       break;
 
     default:
